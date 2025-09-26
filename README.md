@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Sistema de Login Web
 
 Este é um sistema web simples de cadastro e login de usuários, desenvolvido com Flask (Python) e SQLite. Inclui interface moderna e responsiva, validação de campos, armazenamento seguro de senhas e banco de dados local.
