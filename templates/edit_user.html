@@ -28,11 +28,11 @@
       </select>
     </div>
 
-    <div class="form-group" id="teacher_fields" style="display: {% if user.role == 'Professor' %}block{% else %}none{% endif %}">
+    <div class="form-group" id="teacher_fields" {% if user.role != 'Professor' %}style="display:none"{% endif %}>
       <label for="name">Nome do Professor</label>
-      <input class="form-control" type="text" name="name" value="{% if user.teacher %}{{ user.teacher.name }}{% endif %}">
+      <input class="form-control" type="text" name="name" value="{{ user.teacher.name if user.teacher else '' }}">
       <label for="subject" class="mt-2">Matéria</label>
-      <input class="form-control" type="text" name="subject" value="{% if user.teacher %}{{ user.teacher.subject }}{% endif %}">
+      <input class="form-control" type="text" name="subject" value="{{ user.teacher.subject if user.teacher else '' }}">
     </div>
 
     <button type="submit" class="btn btn-primary mt-2">Salvar Alterações</button>
