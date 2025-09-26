@@ -6,13 +6,16 @@ import os
 # Inicializar Flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'chave-secreta-super-segura')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://gestao_escolar_db_5jx5_user:Yi3VFMwLsxZIsN50RPLpy440Th7Rs80W@dpg-d3as2qjipnbc73fd56b0-a.oregon-postgres.render.com/gestao_escolar_db_5jx5')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    'DATABASE_URL',
+    'postgresql://gestao_escolar_db_5jx5_user:Yi3VFMwLsxZIsN50RPLpy440Th7Rs80W@dpg-d3as2qjipnbc73fd56b0-a.oregon-postgres.render.com/gestao_escolar_db_5jx5'
+)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Inicializar banco de dados
 db.init_app(app)
 
-# Criar tabelas se não existirem e garantir root
+# Criar tabelas e garantir root
 with app.app_context():
     db.create_all()
     root_user = User.query.filter_by(username="root").first()
@@ -64,16 +67,6 @@ def root_required(f):
         user = User.query.get(user_id)
         if not user or user.role != 'Root':
             flash('Acesso negado. Apenas o Root pode acessar esta ação.', 'danger')
-            return redirect(url_for('dashboard'))
-        return f(*args, **kwargs)
-    return decorated_function
-
-def professor_or_super_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        user = get_current_user()
-        if not user or user.role not in ['Professor', 'SecretarioEducacao']:
-            flash('Acesso negado. Apenas professores e superusuários podem acessar esta funcionalidade.', 'danger')
             return redirect(url_for('dashboard'))
         return f(*args, **kwargs)
     return decorated_function
@@ -134,15 +127,58 @@ def dashboard():
         turmas = Turma.query.all()
     return render_template('dashboard.html', turmas=turmas, schools=schools)
 
-# Rota para gerenciar usuários (Root)
-@app.route('/dashboard/manage_users')
-@root_required
+# ----------------- GERENCIAR USUÁRIOS -----------------
+@app.route('/dashboard/manage_users', methods=['GET', 'POST'])
+@role_required('SecretarioEducacao')
 def manage_users():
+    schools = School.query.all()
     users = User.query.all()
-    return render_template('manage_users.html', users=users)
+
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+        role = request.form.get('role')
+        name = request.form.get('name')
+        subject = request.form.get('subject')
+        school_id = request.form.get('school_id')
+
+        if not username or not password or not role:
+            flash('Nome de usuário, senha e categoria são obrigatórios.', 'danger')
+            return redirect(url_for('manage_users'))
+        if password != confirm_password:
+            flash('As senhas não coincidem.', 'danger')
+            return redirect(url_for('manage_users'))
+        if len(password) < 6:
+            flash('Senha deve ter pelo menos 6 caracteres.', 'danger')
+            return redirect(url_for('manage_users'))
+
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            flash('Nome de usuário já existe.', 'danger')
+            return redirect(url_for('manage_users'))
+
+        new_user = User(username=username, role=role)
+        new_user.set_password(password)
+        db.session.add(new_user)
+        db.session.flush()
+
+        # Se for professor, criar também o registro Teacher
+        if role == 'Professor':
+            if not name or not subject or not school_id:
+                flash('Para professor, nome, matéria e escola são obrigatórios.', 'danger')
+                return redirect(url_for('manage_users'))
+            new_teacher = Teacher(name=name, subject=subject, school_id=school_id, user_id=new_user.id)
+            db.session.add(new_teacher)
+
+        db.session.commit()
+        flash('Usuário criado com sucesso!', 'success')
+        return redirect(url_for('manage_users'))
+
+    return render_template('manage_users.html', users=users, schools=schools)
 
 @app.route('/dashboard/edit_user/<int:user_id>', methods=['GET', 'POST'])
-@root_required
+@role_required('SecretarioEducacao')
 def edit_user(user_id):
     user = User.query.get_or_404(user_id)
     if request.method == 'POST':
@@ -158,15 +194,18 @@ def edit_user(user_id):
     return render_template('edit_user.html', user=user)
 
 @app.route('/dashboard/delete_user/<int:user_id>', methods=['POST'])
-@root_required
+@role_required('SecretarioEducacao')
 def delete_user(user_id):
     user = User.query.get_or_404(user_id)
+    if user.role == 'Root':
+        flash('Não é possível deletar o usuário Root.', 'danger')
+        return redirect(url_for('manage_users'))
     db.session.delete(user)
     db.session.commit()
     flash('Usuário deletado com sucesso!', 'success')
     return redirect(url_for('manage_users'))
 
-# Rotas de cadastro
+# ----------------- ROTAS DE CADASTRO -----------------
 @app.route('/dashboard/register_school', methods=['GET', 'POST'])
 @login_required
 def register_school():
@@ -174,7 +213,6 @@ def register_school():
     if user.role not in ['SecretarioEducacao', 'Diretor']:
         flash('Acesso negado.', 'danger')
         return redirect(url_for('dashboard'))
-
     if request.method == 'POST':
         name = request.form.get('name')
         address = request.form.get('address')
@@ -268,7 +306,7 @@ def register_teacher():
     schools = School.query.all()
     return render_template('register_teacher.html', schools=schools)
 
-# Logout
+# ----------------- LOGOUT -----------------
 @app.route('/logout')
 @login_required
 def logout():
