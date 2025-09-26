@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        {% if session.role == 'SecretarioEducacao' %}
+        {% if session.role in ['SecretarioEducacao', 'Root'] %}
         <!-- Superuser Section -->
         <div class="row mb-4">
             <div class="col-12">
