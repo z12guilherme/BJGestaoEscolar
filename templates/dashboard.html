@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        {% if session.role in ['SecretarioEducacao', 'Root'] %}
+        {% if session.role == 'SecretarioEducacao' %}
         <!-- Superuser Section -->
         <div class="row mb-4">
             <div class="col-12">
@@ -107,18 +107,16 @@
             </div>
         </div>
 
+        <!-- Grade Management Options (placeholder se add_nota não existe) -->
         {% if session.role in ['Professor', 'SecretarioEducacao'] %}
-        <!-- Grade Management Options -->
         <div class="row">
             <div class="col-md-6 mb-3">
-                <a href="{{ url_for('add_nota') }}" class="text-decoration-none">
-                    <div class="card h-100 login-card">
-                        <div class="card-body text-center">
-                            <i class="fas fa-plus fa-3x" style="color: #a0aec0; margin-bottom: 1rem;"></i>
-                            <h5 class="card-title">Cadastrar Notas</h5>
-                        </div>
+                <div class="card h-100 login-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-plus fa-3x" style="color: #a0aec0; margin-bottom: 1rem;"></i>
+                        <h5 class="card-title">Cadastrar Notas (Em Breve)</h5>
                     </div>
-                </a>
+                </div>
             </div>
             <div class="col-md-6 mb-3">
                 <a href="{{ url_for('relatorios') }}" class="text-decoration-none">
