@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Date
 
@@ -208,4 +207,3 @@ class Nota(db.Model):
 
     def __repr__(self):
         return f'<Nota {self.valor} for Student {self.student_id}>'
->>>>>>> db5166d083e57d9cff6cad4f9277596e8fdc09f1
