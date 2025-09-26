@@ -10,6 +10,7 @@
 - [x] Test the functionality
 - [x] Commit and push changes
 - [x] Remove self-registration feature
+- [x] Restrict user creation to Root only
 =======
 # TODO List for Sistema de Login Web
 

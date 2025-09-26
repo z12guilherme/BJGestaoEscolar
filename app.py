@@ -379,9 +379,9 @@ def manage_turma(turma_id):
     students = Student.query.filter_by(turma_id=turma_id).all()
     return render_template('turma_manage.html', turma=turma, students=students)
 
-# Rota para gerenciar usuários (apenas para SecretarioEducacao)
+# Rota para gerenciar usuários (apenas para Root)
 @app.route('/dashboard/manage_users', methods=['GET', 'POST'])
-@role_required(['Root', 'SecretarioEducacao'])
+@root_required
 def manage_users():
     if request.method == 'POST':
         username = request.form.get('username')
@@ -742,43 +742,7 @@ def index():
         return redirect(url_for('dashboard'))
     return redirect(url_for('login'))
 
-# Rota de cadastro
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        confirm_password = request.form.get('confirm_password')
 
-        # Validação básica no backend
-        if not username or not password:
-            flash('Nome de usuário e senha são obrigatórios.', 'danger')
-            return redirect(url_for('register'))
-
-        if password != confirm_password:
-            flash('As senhas não coincidem.', 'danger')
-            return redirect(url_for('register'))
-
-        if len(password) < 6:
-            flash('A senha deve ter pelo menos 6 caracteres.', 'danger')
-            return redirect(url_for('register'))
-
-        # Verificar se usuário já existe
-        existing_user = User.query.filter_by(username=username).first()
-        if existing_user:
-            flash('Nome de usuário já existe. Escolha outro.', 'danger')
-            return redirect(url_for('register'))
-
-        # Criar novo usuário
-        new_user = User(username=username)
-        new_user.set_password(password)
-        db.session.add(new_user)
-        db.session.commit()
-
-        flash('Cadastro realizado com sucesso! Faça login.', 'success')
-        return redirect(url_for('login'))
-
-    return render_template('register.html')
 
 # Rota de login
 @app.route('/login', methods=['GET', 'POST'])
@@ -1071,9 +1035,9 @@ def manage_turma(turma_id):
     students = Student.query.filter_by(turma_id=turma_id).all()
     return render_template('turma_manage.html', turma=turma, students=students)
 
-# Rota para gerenciar usuários (apenas para SecretarioEducacao)
+# Rota para gerenciar usuários (apenas para Root)
 @app.route('/dashboard/manage_users', methods=['GET', 'POST'])
-@role_required('SecretarioEducacao')
+@root_required
 def manage_users():
     if request.method == 'POST':
         username = request.form.get('username')
