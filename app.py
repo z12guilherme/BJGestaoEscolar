@@ -7,21 +7,12 @@ import os
 app = Flask(__name__)
 
 # ---------------- Configurações ----------------
-# Banco de dados
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL',
     'postgresql://gestao_escolar_db_5jx5_user:Yi3VFMwLsxZIsN50RPLpy440Th7Rs80W@dpg-d3as2qjipnbc73fd56b0-a.oregon-postgres.render.com/gestao_escolar_db_5jx5'
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# SSL obrigatório para PostgreSQL no Render
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-    "connect_args": {
-        "sslmode": "require"
-    }
-}
-
-# SECRET_KEY obrigatório para session
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {"connect_args": {"sslmode": "require"}}
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'chave-super-secreta')
 
 # Inicializar banco de dados
@@ -59,7 +50,8 @@ def role_required(required_roles):
         def decorated_function(*args, **kwargs):
             user = get_current_user()
             roles = required_roles if isinstance(required_roles, list) else [required_roles]
-            if not user or user.role not in roles:
+            # Root sempre tem acesso
+            if not user or (user.role not in roles and user.role != 'Root'):
                 flash('Acesso negado. Você não tem permissão para esta ação.', 'danger')
                 return redirect(url_for('dashboard'))
             return f(*args, **kwargs)
@@ -80,7 +72,7 @@ def professor_or_super_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user = get_current_user()
-        if not user or user.role not in ['Professor', 'SecretarioEducacao']:
+        if not user or user.role not in ['Professor', 'SecretarioEducacao', 'Root']:
             flash('Acesso negado. Apenas professores e superusuários podem acessar esta funcionalidade.', 'danger')
             return redirect(url_for('dashboard'))
         return f(*args, **kwargs)
@@ -158,7 +150,6 @@ def manage_turma(turma_id):
     return render_template('turma_manage.html', turma=turma, alunos=alunos)
 
 # ----------------- Rotas de Cadastro -----------------
-## Cadastro de Escola
 @app.route('/school/register', methods=['GET', 'POST'])
 @login_required
 @role_required(['Root', 'SecretarioEducacao'])
@@ -176,7 +167,6 @@ def register_school():
         return redirect(url_for('dashboard'))
     return render_template('register_school.html')
 
-## Cadastro de Professor
 @app.route('/teacher/register', methods=['GET', 'POST'])
 @login_required
 @role_required(['Root', 'SecretarioEducacao'])
@@ -207,7 +197,6 @@ def register_teacher():
         db.session.add(teacher)
         db.session.commit()
 
-        # Criar usuário vinculado
         user = User(username=username, role='Professor', school_id=school_id)
         user.set_password(password)
         db.session.add(user)
@@ -217,7 +206,6 @@ def register_teacher():
         return redirect(url_for('dashboard'))
     return render_template('register_teacher.html', schools=schools)
 
-## Cadastro de Aluno
 @app.route('/student/register', methods=['GET', 'POST'])
 @login_required
 @role_required(['Root', 'SecretarioEducacao'])
@@ -243,7 +231,6 @@ def register_student():
         return redirect(url_for('dashboard'))
     return render_template('register_student.html', schools=schools)
 
-## Cadastro de Turma
 @app.route('/turma/register', methods=['GET', 'POST'])
 @login_required
 @role_required(['Root', 'SecretarioEducacao', 'Diretor'])
