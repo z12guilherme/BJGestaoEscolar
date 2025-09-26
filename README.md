@@ -1,99 +1,50 @@
-# Sistema de Login Web
+# 📚 BJGestaoEscolar
 
-Este é um sistema web simples de cadastro e login de usuários, desenvolvido com Flask (Python) e SQLite. Inclui interface moderna e responsiva, validação de campos, armazenamento seguro de senhas e banco de dados local.
+Sistema de **gestão escolar completo**, desenvolvido em **Python (Flask)** com integração a banco de dados.  
+O projeto tem como objetivo oferecer uma solução prática para escolas, possibilitando o gerenciamento de alunos, professores, turmas, notas, presença e relatórios.
 
-## Funcionalidades
+---
 
-- Cadastro de usuários com nome de usuário e senha.
-- Login de usuários existentes.
-- Interface responsiva com Bootstrap.
-- Validação de campos no front-end (HTML5 e JavaScript).
-- Feedback visual de sucesso e erro.
-- Alternância entre telas de login e cadastro.
-- Senhas armazenadas com hash seguro.
-- Banco de dados SQLite criado automaticamente.
+## 🚀 Funcionalidades
 
-## Tecnologias Utilizadas
+- 👩‍🏫 Cadastro e gerenciamento de **professores**
+- 👨‍🎓 Cadastro e gerenciamento de **alunos**
+- 🏫 Criação e administração de **turmas**
+- 📊 Lançamento e cálculo automático de **médias de notas**
+- 📅 Controle de **frequência/ presença**
+- 📝 Emissão de relatórios acadêmicos
+- 🔒 Sistema de **login com autenticação**
+- 🗄 Integração com banco de dados (**PostgreSQL**)
 
-- **Backend**: Python 3, Flask, Flask-SQLAlchemy.
-- **Banco de Dados**: SQLite.
-- **Frontend**: HTML5, CSS3 (Bootstrap 5), JavaScript.
-- **Segurança**: Hash de senhas com Werkzeug.
+---
 
-## Pré-requisitos
+## 🛠 Tecnologias Utilizadas
 
-- Python 3.6 ou superior instalado.
-- Pip (gerenciador de pacotes do Python).
+- **Python 3.x**
+- **Flask** (framework web)
+- **PostgreSQL** (banco de dados)
+- **SQLAlchemy** (ORM)
+- **HTML5, CSS3 e Bootstrap** (frontend)
+- **Render** (deploy)
 
-## Instalação e Execução
+---
 
-1. **Clone ou baixe o projeto**:
-   - Descompacte o projeto na pasta desejada.
+## 🌐 Acesse o Sistema
 
-2. **Instale as dependências**:
-   - Abra o terminal na pasta do projeto (`sistema-login`).
-   - Execute: `pip install -r requirements.txt`
+O sistema já está disponível online:  
+👉 [https://bjgestaoescolar.onrender.com/](https://bjgestaoescolar.onrender.com/)  
 
-3. **Execute o aplicativo**:
-   - No terminal, execute: `python app.py`
-   - O servidor será iniciado em `http://127.0.0.1:5000`.
+---
 
-4. **Acesse no navegador**:
-   - Abra `http://127.0.0.1:5000` para acessar a página de login.
-   - Use o link para alternar para cadastro.
+## 📌 Próximos Passos
 
-## Estrutura do Projeto
+- Implementar dashboard com gráficos (notas e presença)  
+- Adicionar envio de notificações para responsáveis  
+- Melhorar a responsividade do frontend  
 
-```
-sistema-login/
-├── app.py                 # Aplicação principal Flask
-├── models.py              # Modelo de dados (User)
-├── init_db.py             # Script opcional para inicializar DB
-├── requirements.txt       # Dependências Python
-├── templates/             # Templates HTML
-│   ├── base.html
-│   ├── login.html
-│   ├── register.html
-│   └── dashboard.html
-├── static/                # Arquivos estáticos
-│   ├── css/
-│   │   └── style.css
-│   └── js/
-│       └── script.js
-└── instance/              # Pasta criada automaticamente para DB SQLite
-    └── database.db
-```
+---
 
-## Como Usar
+## ⚠️ Aviso de Uso
 
-- **Cadastro**: Acesse `/register`, preencha nome de usuário (único, alfanumérico) e senha (mín. 6 caracteres). Confirme a senha.
-- **Login**: Acesse `/login`, insira credenciais válidas.
-- **Dashboard**: Após login, acessa página protegida com opção de logout.
-- **Validação**: Campos obrigatórios; senhas devem coincidir no cadastro.
-- **Feedback**: Mensagens de sucesso (verde) ou erro (vermelho) aparecem após ações.
-
-## Notas de Segurança
-
-- Senhas são hashed com `generate_password_hash` (PBKDF2 por padrão).
-- Sessões são gerenciadas pelo Flask (cookies seguros).
-- Nome de usuário deve ser único; validação no backend.
-- Para produção, considere HTTPS, rate limiting e validação mais robusta.
-
-## Testes
-
-- Teste cadastro com usuário novo.
-- Teste login com credenciais corretas/incorretas.
-- Teste alternância entre páginas.
-- Verifique responsividade em dispositivos móveis.
-
-## Contribuição
-
-Sinta-se à vontade para melhorar o código ou adicionar funcionalidades (e.g., recuperação de senha).
-
-## Licença
-
-Este projeto é de código aberto. Use conforme necessário.
-=======
-# BJGestaoEscolar
-Sistema de gestão escolar.
->>>>>>> db5166d083e57d9cff6cad4f9277596e8fdc09f1
+Este projeto é de **uso restrito**.  
+Não é permitido copiar, modificar ou distribuir o código sem autorização prévia do autor.
