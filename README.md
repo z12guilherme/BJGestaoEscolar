@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Sistema de Login Web
 
 Este é um sistema web simples de cadastro e login de usuários, desenvolvido com Flask (Python) e SQLite. Inclui interface moderna e responsiva, validação de campos, armazenamento seguro de senhas e banco de dados local.
@@ -93,3 +94,7 @@ Sinta-se à vontade para melhorar o código ou adicionar funcionalidades (e.g., 
 ## Licença
 
 Este projeto é de código aberto. Use conforme necessário.
+=======
+# BJGestaoEscolar
+Sistema de gestão escolar.
+>>>>>>> db5166d083e57d9cff6cad4f9277596e8fdc09f1

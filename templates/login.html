@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block title %}Login{% endblock %}
@@ -45,3 +46,52 @@
     </div>
 </div>
 {% endblock %}
+=======
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card login-card">
+            <div class="card-header">
+                <div class="text-center mb-3">
+                    <i class="fas fa-graduation-cap fa-3x" style="color: #a0aec0;"></i>
+                </div>
+                <h3 class="card-title text-center">Login</h3>
+                <p class="text-center mb-0" style="color: #bbb;">Acesse sua conta</p>
+            </div>
+            <div class="card-body">
+                <form id="loginForm" method="POST" novalidate>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nome de Usuário</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" class="form-control" id="username" name="username" required autocomplete="username">
+                        </div>
+                        <div class="invalid-feedback">
+                            Nome de usuário é obrigatório.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Senha</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control" id="password" name="password" required autocomplete="current-password">
+                        </div>
+                        <div class="invalid-feedback">
+                            Senha é obrigatória.
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <p>Não tem conta? <a href="{{ url_for('register') }}">Cadastre-se</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+>>>>>>> db5166d083e57d9cff6cad4f9277596e8fdc09f1

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block title %}Gerenciar Usuários{% endblock %}
@@ -129,3 +130,126 @@ document.getElementById('role').addEventListener('change', function() {
 });
 </script>
 {% endblock %}
+=======
+{% extends "base.html" %}
+
+{% block title %}Gerenciar Usuários{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card login-card">
+            <div class="card-header">
+                <div class="text-center mb-3">
+                    <i class="fas fa-users-cog fa-3x" style="color: #a0aec0;"></i>
+                </div>
+                <h3 class="card-title text-center">Gerenciar Usuários</h3>
+            </div>
+            <div class="card-body">
+                <!-- Create User Form -->
+                <h5>Criar Novo Usuário</h5>
+                <form method="POST" class="mb-4">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="username" class="form-label">Nome de Usuário</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">Senha</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="confirm_password" class="form-label">Confirmar Senha</label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="role" class="form-label">Categoria</label>
+                            <select class="form-control" id="role" name="role" required>
+                                <option value="">Selecione...</option>
+                                <option value="SecretarioEducacao">Secretário de Educação</option>
+                                <option value="Diretor">Diretor</option>
+                                <option value="Professor">Professor</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="school_id" class="form-label">Escola</label>
+                            <select class="form-control" id="school_id" name="school_id">
+                                <option value="">Selecione...</option>
+                                {% for school in schools %}
+                                <option value="{{ school.id }}">{{ school.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3" id="teacher_fields" style="display: none;">
+                            <label for="name" class="form-label">Nome do Professor</label>
+                            <input type="text" class="form-control" id="name" name="name">
+                            <label for="subject" class="form-label mt-2">Matéria</label>
+                            <input type="text" class="form-control" id="subject" name="subject">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success">Criar Usuário</button>
+                </form>
+
+                <!-- Users List -->
+                <h5>Usuários Existentes</h5>
+                {% if users %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Usuário</th>
+                                <th>Categoria</th>
+                                <th>Escola</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.role }}</td>
+                                <td>{{ user.school.name if user.school else 'N/A' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p>Nenhum usuário encontrado.</p>
+                {% endif %}
+            </div>
+            <div class="card-footer text-center">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Voltar ao Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('role').addEventListener('change', function() {
+    var role = this.value;
+    var teacherFields = document.getElementById('teacher_fields');
+    var schoolSelect = document.getElementById('school_id');
+    if (role === 'Professor' || role === 'Diretor') {
+        schoolSelect.required = true;
+        if (role === 'Professor') {
+            teacherFields.style.display = 'block';
+            document.getElementById('name').required = true;
+        } else {
+            teacherFields.style.display = 'none';
+            document.getElementById('name').required = false;
+        }
+    } else {
+        schoolSelect.required = false;
+        teacherFields.style.display = 'none';
+        document.getElementById('name').required = false;
+    }
+});
+</script>
+{% endblock %}
+>>>>>>> db5166d083e57d9cff6cad4f9277596e8fdc09f1
