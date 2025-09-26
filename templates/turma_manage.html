@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block title %}Gerenciar Turma{% endblock %}
@@ -56,62 +55,3 @@
     </div>
 </div>
 {% endblock %}
-=======
-{% extends "base.html" %}
-
-{% block title %}Gerenciar Turma{% endblock %}
-
-{% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card login-card">
-            <div class="card-header">
-                <div class="text-center mb-3">
-                    <i class="fas fa-users fa-3x" style="color: #a0aec0;"></i>
-                </div>
-                <h3 class="card-title text-center">Gerenciar Turma: {{ turma.name }}</h3>
-                <p class="text-center mb-0" style="color: #bbb;">Escola: {{ turma.school.name }}</p>
-            </div>
-            <div class="card-body">
-                <!-- Add Student Form -->
-                <h5>Adicionar Aluno</h5>
-                <form method="POST" class="mb-4">
-                    <input type="hidden" name="action" value="add_student">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Nome do Aluno</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="birth_date" class="form-label">Data de Nascimento</label>
-                        <input type="date" class="form-control" id="birth_date" name="birth_date">
-                    </div>
-                    <button type="submit" class="btn btn-success">Adicionar Aluno</button>
-                </form>
-
-                <!-- Students List -->
-                <h5>Alunos na Turma</h5>
-                {% if students %}
-                <ul class="list-group mb-3">
-                    {% for student in students %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        {{ student.name }}
-                        <form method="POST" style="display: inline;">
-                            <input type="hidden" name="action" value="remove_student">
-                            <input type="hidden" name="student_id" value="{{ student.id }}">
-                            <button type="submit" class="btn btn-danger btn-sm">Remover</button>
-                        </form>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p>Nenhum aluno nesta turma ainda.</p>
-                {% endif %}
-            </div>
-            <div class="card-footer text-center">
-                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Voltar ao Dashboard</a>
-            </div>
-        </div>
-    </div>
-</div>
-{% endblock %}
->>>>>>> db5166d083e57d9cff6cad4f9277596e8fdc09f1
