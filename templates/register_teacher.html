@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastrar Professor{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card login-card">
+            <div class="card-header">
+                <div class="text-center mb-3">
+                    <i class="fas fa-graduation-cap fa-3x" style="color: #a0aec0;"></i>
+                </div>
+                <h3 class="card-title text-center">Cadastrar Professor</h3>
+                <p class="text-center mb-0" style="color: #bbb;">Adicione um novo professor</p>
+            </div>
+            <div class="card-body">
+                <form method="POST" novalidate>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nome de Usuário</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" class="form-control" id="username" name="username" required minlength="3">
+                        </div>
+                        <div class="invalid-feedback">
+                            Nome de usuário é obrigatório e deve ter pelo menos 3 caracteres.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Senha</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control" id="password" name="password" required minlength="6">
+                        </div>
+                        <div class="invalid-feedback">
+                            Senha é obrigatória e deve ter pelo menos 6 caracteres.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label">Confirmar Senha</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required minlength="6">
+                        </div>
+                        <div class="invalid-feedback">
+                            As senhas devem coincidir.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nome do Professor</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-chalkboard-teacher"></i></span>
+                            <input type="text" class="form-control" id="name" name="name" required minlength="3">
+                        </div>
+                        <div class="invalid-feedback">
+                            Nome do professor é obrigatório e deve ter pelo menos 3 caracteres.
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Disciplina</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-book"></i></span>
+                            <input type="text" class="form-control" id="subject" name="subject">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="school_id" class="form-label">Escola</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-school"></i></span>
+                            <select class="form-control" id="school_id" name="school_id" required>
+                                <option value="">Selecione uma escola</option>
+                                {% for school in schools %}
+                                <option value="{{ school.id }}">{{ school.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="invalid-feedback">
+                            Selecione uma escola.
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Cadastrar Professor</button>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <a href="{{ url_for('dashboard') }}">Voltar ao Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

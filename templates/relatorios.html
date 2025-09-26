@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Relatórios de Notas{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card login-card">
+            <div class="card-header">
+                <h3 class="card-title text-center">Relatórios de Notas</h3>
+            </div>
+            <div class="card-body">
+                {% if notas_by_turma %}
+                    {% for turma_id, data in notas_by_turma.items() %}
+                        <div class="mb-4">
+                            <h4>{{ data.turma.name }} (Ano: {{ data.turma.year or 'N/A' }}) - {{ data.turma.school.name }}</h4>
+                            {% if data.notas %}
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Aluno</th>
+                                            <th>Semestre</th>
+                                            <th>Nota</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for nota in data.notas %}
+                                            <tr>
+                                                <td>{{ nota.student_name }}</td>
+                                                <td>{{ nota.semestre }}</td>
+                                                <td>{{ "%.2f"|format(nota.valor) }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <p class="text-muted">Nenhuma nota cadastrada para esta turma.</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center text-muted">Nenhuma turma disponível ou sem notas para exibir.</p>
+                {% endif %}
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Voltar ao Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

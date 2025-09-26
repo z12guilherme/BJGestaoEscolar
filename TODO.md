@@ -1,0 +1,11 @@
+- [x] Create Root user in database via Python shell
+- [x] Add @root_required decorator in app.py
+- [x] Add reset_password route in app.py
+- [x] Add edit_user route in app.py
+- [x] Add delete_user route in app.py
+- [x] Create templates/reset_password.html
+- [x] Create templates/edit_user.html
+- [x] Update templates/manage_users.html with Actions column
+- [x] Test the functionality
+- [x] Commit and push changes
+- [x] Remove self-registration feature
