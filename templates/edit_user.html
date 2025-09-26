@@ -12,6 +12,9 @@
         <option value="SecretarioEducacao" {% if user.role == 'SecretarioEducacao' %}selected{% endif %}>Secretário de Educação</option>
         <option value="Diretor" {% if user.role == 'Diretor' %}selected{% endif %}>Diretor</option>
         <option value="Professor" {% if user.role == 'Professor' %}selected{% endif %}>Professor</option>
+        {% if user.role == 'Root' %}
+        <option value="Root" selected>Root</option>
+        {% endif %}
       </select>
     </div>
 
@@ -42,22 +45,22 @@ document.getElementById('role').addEventListener('change', function() {
     var role = this.value;
     var teacherFields = document.getElementById('teacher_fields');
     var schoolSelect = document.getElementById('school_id');
-    if (role === 'Professor' || role === 'Diretor') {
+
+    if (role === 'Professor') {
+        teacherFields.style.display = 'block';
+        document.querySelector('input[name="name"]').required = true;
+        document.querySelector('input[name="subject"]').required = true;
         schoolSelect.required = true;
-        if (role === 'Professor') {
-            teacherFields.style.display = 'block';
-            document.querySelector('input[name="name"]').required = true;
-            document.querySelector('input[name="subject"]').required = true;
-        } else {
-            teacherFields.style.display = 'none';
-            document.querySelector('input[name="name"]').required = false;
-            document.querySelector('input[name="subject"]').required = false;
-        }
-    } else {
-        schoolSelect.required = false;
+    } else if (role === 'Diretor' || role === 'SecretarioEducacao') {
         teacherFields.style.display = 'none';
         document.querySelector('input[name="name"]').required = false;
         document.querySelector('input[name="subject"]').required = false;
+        schoolSelect.required = true;
+    } else {
+        teacherFields.style.display = 'none';
+        document.querySelector('input[name="name"]').required = false;
+        document.querySelector('input[name="subject"]').required = false;
+        schoolSelect.required = false;
     }
 });
 </script>
