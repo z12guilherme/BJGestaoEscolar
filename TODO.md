@@ -43,3 +43,4 @@
 - [x] Run python init_db.py to recreate DB with Nota table
 - [x] Run python app.py and perform thorough testing: Create test data (school, teacher, turma, student), login as root and professor, test add_nota access/restrictions, add/edit notes, view reports, unauthorized access flashes, dynamic JS works
 >>>>>>> db5166d083e57d9cff6cad4f9277596e8fdc09f1
+- [x] Remove self-registration feature
