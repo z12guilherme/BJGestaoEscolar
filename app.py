@@ -148,6 +148,14 @@ def dashboard():
         turmas = Turma.query.all()
     return render_template('dashboard.html', turmas=turmas, schools=schools)
 
+@app.route('/turma/<int:turma_id>/manage')
+@login_required
+@professor_or_super_required
+def manage_turma(turma_id):
+    turma = Turma.query.get_or_404(turma_id)
+    alunos = Student.query.filter_by(turma_id=turma.id).all()
+    return render_template('turma_manage.html', turma=turma, alunos=alunos)
+
 # ----------------- Rodar App -----------------
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
