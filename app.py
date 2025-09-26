@@ -263,6 +263,17 @@ def register_turma():
         return redirect(url_for('dashboard'))
     return render_template('register_turma.html', schools=schools, teachers=teachers)
 
+# ----------------- Exclusão de Turma -----------------
+@app.route('/turma/<int:turma_id>/delete', methods=['POST'])
+@login_required
+@role_required(['Root', 'SecretarioEducacao', 'Diretor'])
+def delete_turma(turma_id):
+    turma = Turma.query.get_or_404(turma_id)
+    db.session.delete(turma)
+    db.session.commit()
+    flash(f'Turma "{turma.name}" excluída com sucesso!', 'success')
+    return redirect(url_for('dashboard'))
+
 # ----------------- Rodar App -----------------
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))

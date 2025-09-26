@@ -36,32 +36,38 @@
         {% endif %}
 
         {% if turmas %}
-        <!-- Teacher's Turmas Section -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card login-card">
-                    <div class="card-header">
-                        <h4 class="card-title text-center">Suas Turmas</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            {% for turma in turmas %}
-                            <div class="col-md-6 mb-3">
-                                <div class="card h-100">
-                                    <div class="card-body text-center">
-                                        <h5 class="card-title">{{ turma.name }} (Ano: {{ turma.year or 'N/A' }})</h5>
-                                        <p class="card-text">Escola: {{ turma.school.name }}</p>
-                                        <a href="{{ url_for('manage_turma', turma_id=turma.id) }}" class="btn btn-primary">Gerenciar Alunos</a>
-                                    </div>
-                                </div>
+      {% if turmas %}
+<!-- Teacher's Turmas Section -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card login-card">
+            <div class="card-header">
+                <h4 class="card-title text-center">Suas Turmas</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for turma in turmas %}
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ turma.name }} (Ano: {{ turma.year or 'N/A' }})</h5>
+                                <p class="card-text">Escola: {{ turma.school.name }}</p>
+                                <a href="{{ url_for('manage_turma', turma_id=turma.id) }}" class="btn btn-primary mb-2">Gerenciar Alunos</a>
+                                {% if session.role in ['Root', 'SecretarioEducacao', 'Diretor'] %}
+                                <form action="{{ url_for('delete_turma', turma_id=turma.id) }}" method="POST" onsubmit="return confirm('Deseja realmente excluir a turma {{ turma.name }}?');">
+                                    <button type="submit" class="btn btn-danger btn-sm">Excluir Turma</button>
+                                </form>
+                                {% endif %}
                             </div>
-                            {% endfor %}
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
-        {% endif %}
+    </div>
+</div>
+{% endif %}
 
         <!-- Registration Options -->
         <div class="row">
