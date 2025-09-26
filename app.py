@@ -5,22 +5,29 @@ import os
 
 # Inicializar Flask app
 app = Flask(__name__)
+
+# ---------------- Configurações ----------------
+# Banco de dados
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL',
     'postgresql://gestao_escolar_db_5jx5_user:Yi3VFMwLsxZIsN50RPLpy440Th7Rs80W@dpg-d3as2qjipnbc73fd56b0-a.oregon-postgres.render.com/gestao_escolar_db_5jx5'
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Configurar SSL obrigatório para PostgreSQL no Render
+# SSL obrigatório para PostgreSQL no Render
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     "connect_args": {
         "sslmode": "require"
     }
 }
+
+# SECRET_KEY obrigatório para usar session
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'chave-super-secreta')
+
 # Inicializar banco de dados
 db.init_app(app)
 
-# Criar tabelas e garantir root
+# ---------------- Criar tabelas e garantir root ----------------
 with app.app_context():
     db.create_all()
     root_user = User.query.filter_by(username="root").first()
@@ -65,7 +72,7 @@ def root_required(f):
         if not user or user.role != 'Root':
             flash('Acesso negado. Apenas o Root pode acessar esta ação.', 'danger')
             return redirect(url_for('dashboard'))
-        return f(*args, **kwargs)
+        return decorated_function
     return decorated_function
 
 def professor_or_super_required(f):
@@ -75,7 +82,7 @@ def professor_or_super_required(f):
         if not user or user.role not in ['Professor', 'SecretarioEducacao']:
             flash('Acesso negado. Apenas professores e superusuários podem acessar esta funcionalidade.', 'danger')
             return redirect(url_for('dashboard'))
-        return f(*args, **kwargs)
+        return decorated_function
     return decorated_function
 
 # ----------------- Helpers -----------------
@@ -140,9 +147,6 @@ def dashboard():
         schools = School.query.all()
         turmas = Turma.query.all()
     return render_template('dashboard.html', turmas=turmas, schools=schools)
-
-# ----------------- Todas as outras rotas mantidas -----------------
-# ... aqui você mantém todas as rotas de gerenciamento de usuários, cadastro de escolas, alunos, professores, turmas, etc.
 
 # ----------------- Rodar App -----------------
 if __name__ == '__main__':
